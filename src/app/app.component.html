@@ -1,0 +1,42 @@
+<div class="main-container">
+  <!-- Trip Form to add new trips -->
+  <div class="trip-form">
+    <form [formGroup]="tripForm" (ngSubmit)="addTrip()">
+      <label for="startPoint">Start Point:</label>
+      <input id="startPoint" formControlName="startPoint" required>
+
+      <label for="endPoint">End Point:</label>
+      <input id="endPoint" formControlName="endPoint" required>
+
+      <button type="submit">Add Trip</button>
+    </form>
+  </div>
+
+
+  <!-- Trips Display -->
+  <div class="trips-wrapper">
+    <div *ngFor="let trip of trips; let i = index"
+      [ngClass]="{'level-2-trip': trip.level === 2, 'level-1-trip': trip.level === 1}" class="trip">
+      <div class="trip-details">
+        <div class="trip-details-text">
+          <div class="circle"></div>
+          <span>{{ trip.startPoint }} - {{ trip.endPoint }}</span>
+        </div>
+        <div *ngIf="i < trips.length - 1" class="connection-line" [ngClass]="{
+          'upward-arrow': trip.level === 1 && trips[i + 1].level === 2,
+          'downward-arrow': trip.level === 2 && trips[i + 1].level === 1,
+          'horizontal-arrow': (trip.level === 1 && trips[i + 1].level === 1) || 
+                            (trip.level === 2 && trips[i + 1].level === 2)
+        }">
+          <!--  Arrow tip only for horizontal arrows when endpoint != next startpoint -->
+          <div *ngIf="((trip.level === 1 && trips[i + 1].level === 1) || 
+                 (trip.level === 2 && trips[i + 1].level === 2)) && 
+                 trip.endPoint !== trips[i + 1].startPoint" class="arrow-tip">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
